@@ -1,5 +1,8 @@
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.function.DoubleToIntFunction;
+
+import static java.lang.System.out;
 
 public class TeltonikaTcpSimulator {
 
@@ -7,12 +10,19 @@ public class TeltonikaTcpSimulator {
     private static final int SERVER_PORT=5027;
 
     public static void main(String[] args) throws Exception{
-        System.out.println("Connecting to Traccar on port " +SERVER_PORT+ "...");
+         out.println("Connecting to Traccar on port " +SERVER_PORT+ "...");
 
         Socket socket=new Socket(SERVER_IP,SERVER_PORT);
-        System.out.println("Connected");
+        out.println("Connected");
 
         OutputStream out=socket.getOutputStream();
+
+        byte[] imeiPacket=buildImeiPacket();
+        out.write(imeiPacket);
+        out.flush();
+        System.out.println("IMEI set!");
+
+        Thread.sleep(500);
 
         byte[] packet = buildCodec8Packet();
         out.write(packet);
@@ -98,7 +108,20 @@ public class TeltonikaTcpSimulator {
 
             return packet;
         }
+private static byte[] buildImeiPacket(){
+        String imei= "123456789012345";
 
+        byte[] imeiBytes =imei.getBytes();
+        byte[] packet= new byte[2 + imeiBytes.length];
+
+        packet[0] = (byte)(imeiBytes.length >> 8);
+        packet[1] = (byte)(imeiBytes.length);
+
+        for (int index=0;index < imeiBytes.length;index++){
+            packet[2 + index] = imeiBytes[index];
+        }
+        return packet;
+}
 
     }
 
