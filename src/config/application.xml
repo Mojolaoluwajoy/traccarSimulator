@@ -12,7 +12,7 @@
 
     <!-- Webhook forwarding -->
     <entry key="event.forward.enable">true</entry>
-    <entry key="event.forward.url">http://webhook.site/28f8c79e-2ca3-4571-a914-408bdd328d08</entry>
+    <entry key="event.forward.url">https://traccar-webhook-server.onrender.com/webhook</entry>
     <entry key="event.forward.header">Content-Type: application/json</entry>
     <entry key="event.forward.position">true</entry>
     <entry key="event.forward.events">true</entry>
